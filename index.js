@@ -27,8 +27,11 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 
 // GET (READ Todos)
+// Concept: routing
 app.get("/", (req, res) => {
+    // Concept: callback
     TodoTask.find({}, (err, tasks) => {
+        // Concept: template
         res.render("todo.ejs", { todoTasks: tasks });
     });
 });
@@ -40,6 +43,7 @@ app.post('/', async (req, res) => {
     });
 
     try {
+        // Concept: database
         await todoTask.save();
         res.redirect("/");
     } catch (err) {
@@ -48,13 +52,16 @@ app.post('/', async (req, res) => {
  });
 
 // GET/POST (UPDATE Todo)
+// Concept: routing
 app.route("/edit/:id").get((req, res) => {
-    const id = req.params.id;
+    const id = req.params.id; // Concept: requestParameters
     TodoTask.find({}, (err, tasks) => {
+        // Concept: template
         res.render("todoEdit.ejs", { todoTasks: tasks, idTask: id });
     });
 }).post((req, res) => {
     const id = req.params.id;
+    // Concept: database
     TodoTask.findByIdAndUpdate(id, { content: req.body.content }, err => {
         if (err) return res.send(500, err);
         res.redirect("/");
@@ -62,8 +69,10 @@ app.route("/edit/:id").get((req, res) => {
 });
 
 // GET (DELETE Todo)
+// Concept: routing
 app.route("/remove/:id").get((req, res) => {
-    const id = req.params.id;
+    const id = req.params.id; // Concept: requestParameters
+    // Concept: database
     TodoTask.findByIdAndRemove(id, err => {
         if (err) return res.send(500, err);
         res.redirect("/");
